@@ -8,7 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -35,16 +42,22 @@ public class Produit {
     private String prix;
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "categorie_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Categorie categorie;
 
     public Produit() {
     }
 
-    public Produit(Long id, Set<Magasin> projects, String label, String prix, String description) {
+    public Produit(Long id, Set<Magasin> projects, String label, String prix, String description, Categorie categorie) {
         this.id = id;
         this.projects = projects;
         this.label = label;
         this.prix = prix;
         this.description = description;
+        this.categorie = categorie;
     }
 
     public Long getId() {
@@ -87,4 +100,11 @@ public class Produit {
         this.description = description;
     }
 
+    public Categorie getCategorie() {
+        return this.categorie;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
+    }
 }
