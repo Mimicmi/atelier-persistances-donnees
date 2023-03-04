@@ -16,7 +16,7 @@ public class CategorieController {
     @Autowired
     private CategorieRepository categorieRepository;
 
-    @PostMapping("categories")
+    @PostMapping("/categories")
     public ResponseEntity<?> createCategorie(@RequestBody Categorie categorie) {
         categorieRepository.save(categorie);
         return new ResponseEntity<>("categorie id: " + categorie.getId(), HttpStatus.OK);

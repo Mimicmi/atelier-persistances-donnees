@@ -24,13 +24,13 @@ public class MagasinController {
     @Autowired
     private MagasinRepository magasinRepository;
     
-    @GetMapping("magasins")
+    @GetMapping("/magasins")
     public ResponseEntity<List<Magasin>> getMagasins() {
         List<Magasin> magasins = magasinRepository.findAll();
         return new ResponseEntity<>(magasins, HttpStatus.OK);
     }
 
-    @GetMapping("magasins/{id}")
+    @GetMapping("/magasins/{id}")
     public ResponseEntity<Magasin> getMagasinById(@PathVariable("id") Long id) {
         Optional<Magasin> magasin = magasinRepository.findById(id);
 
@@ -40,13 +40,13 @@ public class MagasinController {
         return new ResponseEntity<>(magasin.get(), HttpStatus.OK);
     }
 
-    @PostMapping("magasins")
+    @PostMapping("/magasins")
     public ResponseEntity<?> createMagasin(@RequestBody Magasin magasin) {
         magasinRepository.save(magasin);
         return new ResponseEntity<>(magasin.getId(), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("magasins/{id}")
+    @DeleteMapping("/magasins/{id}")
     public ResponseEntity<?> deleteMagasin(@PathVariable("id") Long id) {
         try {
             magasinRepository.deleteById(id);
@@ -56,7 +56,7 @@ public class MagasinController {
         }
     }
 
-    @PutMapping("magasins/{id}")
+    @PutMapping("/magasins/{id}")
     public ResponseEntity<Magasin> updateMagasin(@PathVariable("id") Long id, @RequestBody Magasin magasin) {
         Optional<Magasin> magasinData = magasinRepository.findById(id);
 
