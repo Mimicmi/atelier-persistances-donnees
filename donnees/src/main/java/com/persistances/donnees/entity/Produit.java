@@ -39,7 +39,7 @@ public class Produit {
     Set <Magasin> projects = new HashSet<Magasin>();
 
     private String label;
-    private String prix;
+    private int prix;
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -51,7 +51,7 @@ public class Produit {
     public Produit() {
     }
 
-    public Produit(Long id, Set<Magasin> projects, String label, String prix, String description, Categorie categorie) {
+    public Produit(Long id, Set<Magasin> projects, String label, int prix, String description, Categorie categorie) {
         this.id = id;
         this.projects = projects;
         this.label = label;
@@ -84,11 +84,11 @@ public class Produit {
         this.label = label;
     }
 
-    public String getPrix() {
+    public int getPrix() {
         return this.prix;
     }
 
-    public void setPrix(String prix) {
+    public void setPrix(int prix) {
         this.prix = prix;
     }
 
