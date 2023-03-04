@@ -34,9 +34,9 @@ public class Produit {
             CascadeType.MERGE
         })
     @JoinTable(name = "magasin_produit",
-        joinColumns = { @JoinColumn(name = "magasin_id") },
-        inverseJoinColumns = { @JoinColumn(name = "produit_id") })
-    Set <Magasin> projects = new HashSet<Magasin>();
+        joinColumns = { @JoinColumn(name = "produit_id") },
+        inverseJoinColumns = { @JoinColumn(name = "magasin_id") })
+    Set <Magasin> magasin = new HashSet<>();
 
     private String label;
     private int prix;
@@ -51,9 +51,9 @@ public class Produit {
     public Produit() {
     }
 
-    public Produit(Long id, Set<Magasin> projects, String label, int prix, String description, Categorie categorie) {
+    public Produit(Long id, Set<Magasin> magasin, String label, int prix, String description, Categorie categorie) {
         this.id = id;
-        this.projects = projects;
+        this.magasin = magasin;
         this.label = label;
         this.prix = prix;
         this.description = description;
@@ -68,12 +68,12 @@ public class Produit {
         this.id = id;
     }
 
-    public Set<Magasin> getProjects() {
-        return this.projects;
+    public Set<Magasin> getMagasin() {
+        return this.magasin;
     }
 
-    public void setProjects(Set<Magasin> projects) {
-        this.projects = projects;
+    public void setMagasin(Set<Magasin> magasin) {
+        this.magasin = magasin;
     }
 
     public String getLabel() {
