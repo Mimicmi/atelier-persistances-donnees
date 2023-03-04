@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,5 +58,28 @@ public class ProduitController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(produit, HttpStatus.OK);
+    }
+
+    @PutMapping("/produits/{id}")
+    public ResponseEntity<Produit> updateProduit(@PathVariable("id") Long id, @RequestParam Long magasinId, @RequestBody Produit produitDetails) {
+        Optional<Produit> produit = produitRepository.findById(id);
+        Optional<Magasin> magasin = magasinRepository.findById(magasinId);
+
+        if(!produit.isPresent() || !magasin.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        Magasin magasinToUpdate = magasin.get();
+        magasinToUpdate = magasinRepository.save(magasinToUpdate);
+
+        Produit _produit = produit.get();
+        _produit.setLabel(produitDetails.getLabel());
+        _produit.setPrix(produitDetails.getPrix());
+        _produit.setDescription(produitDetails.getDescription());
+        _produit.setCategorie(produitDetails.getCategorie());
+
+        _produit.getMagasin().clear();
+        _produit.getMagasin().add(magasinToUpdate);
+
+        return ResponseEntity.ok(produitRepository.save(_produit));
     }
 }
