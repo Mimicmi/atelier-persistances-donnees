@@ -1,7 +1,11 @@
 package com.persistances.donnees.controller;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
+import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityManager;
+
 import com.persistances.donnees.entity.Magasin;
+import com.persistances.donnees.entity.Produit;
 import com.persistances.donnees.repository.MagasinRepository;
 
 @RestController
@@ -23,6 +30,9 @@ public class MagasinController {
 
     @Autowired
     private MagasinRepository magasinRepository;
+
+    @Autowired
+    private EntityManager entityManager;
     
     @GetMapping("/magasins")
     public ResponseEntity<List<Magasin>> getMagasins() {
@@ -67,5 +77,14 @@ public class MagasinController {
         _magasin.setAdresse(magasin.getAdresse());
         _magasin.setLabel(magasin.getLabel());
         return new ResponseEntity<>(magasinRepository.save(_magasin), HttpStatus.OK);
+    }
+
+    @GetMapping("/{magasinId}/produits")
+    public ResponseEntity<Set<Produit>> getProduitsByMagasinId(@PathVariable Long magasinId) {
+        TypedQuery<Produit> query = entityManager.createQuery("SELECT p FROM Produit p JOIN p.magasin m WHERE m.id = :magasinId", Produit.class);
+        query.setParameter("magasinId", magasinId);
+        List<Produit> produits = query.getResultList();
+        Set<Produit> produitsSet = new HashSet<>(produits);
+        return ResponseEntity.ok(produitsSet);
     }
 }
