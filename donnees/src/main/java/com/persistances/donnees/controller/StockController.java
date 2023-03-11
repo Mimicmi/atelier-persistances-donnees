@@ -79,4 +79,9 @@ public class StockController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/stocks/produit/{produitId}")
+    public List<Stock> getStocksByProduitId(@PathVariable Long produitId) {
+        return stockRepository.findByProduitId(produitId);
+    }
 }
