@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Form  } from 'react-bootstrap';
 
 
-const ProduitInput = ({ categorie, setCategorie }) => {
+const ProduitInput = ({ categorie, setter }) => {
 
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        Api.get('produit' )
+        Api.get('categories' )
             .then(res => res.data)
             .then(
                 (result) => {
@@ -21,7 +21,8 @@ const ProduitInput = ({ categorie, setCategorie }) => {
     return (
         <div>
             <Form.Group>
-                <Form.Select value={categorie} onChange={(event) => setCategorie(event.target.value)}>
+                <Form.Label>Catégorie</Form.Label>
+                <Form.Select value={categorie} onChange={(event) => setter(event.target.value)}>
                     <option value="" disabled>Selectionner votre produit à ajouter</option>
                     {categories.map(categorieMap => (
                         <option value={categorieMap.id}>{categorieMap.label}</option>

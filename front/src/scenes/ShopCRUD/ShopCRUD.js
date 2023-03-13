@@ -10,7 +10,7 @@ function ShopCRUD() {
     const [currentSpecies, setCurrentSpecies] = useState({});
 
     const updtedSpecieTable = () => {
-        Api.get('species')
+        Api.get('magasins')
             .then((res) => {
                 setShops(res.data)
             })
@@ -26,14 +26,15 @@ function ShopCRUD() {
         setShowAddModal(true);
     }
     const handleEditModalClose = () => setShowEditModal(false);
-    const handleEditModalShow = (shops) => {
-        setCurrentSpecies(shops);
+    const handleEditModalShow = (shop) => {
+        console.log(shop)
+        setCurrentSpecies(shop);
         setShowEditModal(true);
     };
 
     const handleAddShop = (shop) => {
-        // Ajout d'une nouvelle espèce à la table "Species"
-        Api.post('species', shop)
+        console.log(shop)
+        Api.post('magasins', shop)
             .then((res) => {
                 updtedSpecieTable()
                 handleAddModalClose()
@@ -45,7 +46,7 @@ function ShopCRUD() {
 
     const handleEditShop = (shops) => {
         // Mise à jour d'une espèce existante dans la table "Species"
-        Api.put(`species/${shops.id}`, shops)
+        Api.put(`magasins/${shops.id}`, shops)
             .then(res => {
                 //TODO : vérification que tu c'est bien passé
                 updtedSpecieTable()
@@ -55,7 +56,7 @@ function ShopCRUD() {
 
     const handleDeleteSpecies = (id) => {
         // Suppression d'une espèce de la table "Species"
-        Api.delete(`shops/${id}`)
+        Api.delete(`magasins/${id}`)
             .then(res => {
                 const updatedShops = shops.filter(item => item.id !== id);
                 setShops(updatedShops);
@@ -77,20 +78,21 @@ function ShopCRUD() {
                 <tbody>
                     {shops.map(shop => (
                         <tr key={shop.id}>
+                            <td>{shop.id}</td>
                             <td>{shop.label}</td>
-                            <td>{shop.Adresse}</td>
+                            <td>{shop.adresse}</td>
                             
-                            <td className='d-flex'>
+                            <td>
                                 <Button variant="warning" onClick={() => handleEditModalShow(shop)}>Editer</Button>{' '}
                                 <Button variant="danger" onClick={() => handleDeleteSpecies(shop.id)}>Supprimer</Button>
                             </td>
 
-                            <th>Rentrer dans le magasin</th>
+                            <th><a href={'shop/' + shop.id}>Rentrer dans le magasin</a></th>
                         </tr>
                     ))}
                 </tbody>
             </Table>
-            <Button variant="primary" onClick={handleAddModalShow}>Ajouter une espèce</Button>
+            <Button variant="primary" onClick={handleAddModalShow}>Ajouter une magasin</Button>
 
             <Modal show={showAddModal} onHide={handleAddModalClose}>
                 <Modal.Header closeButton>
@@ -100,13 +102,12 @@ function ShopCRUD() {
                     <Form>
                         <Form.Group>
                             <Form.Label>Nom du magasin</Form.Label>
-                            <Form.Control type="text" placeholder="Entrer le nom de l'espèce" onChange={e => setCurrentSpecies({ ...currentSpecies, specie: e.target.value })} />
+                            <Form.Control type="text" placeholder="Entrer le nom de l'espèce" onChange={e => setCurrentSpecies({ ...currentSpecies, label: e.target.value })} />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Adresse</Form.Label>
-                            <Form.Control type="text" placeholder="Entrer la description de l'espèce" onChange={e => setCurrentSpecies({ ...currentSpecies, description: e.target.value })} />
+                            <Form.Control type="text" placeholder="Entrer la description de l'espèce" onChange={e => setCurrentSpecies({ ...currentSpecies, adresse: e.target.value })} />
                         </Form.Group>
-
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -123,11 +124,11 @@ function ShopCRUD() {
                     <Form>
                         <Form.Group>
                             <Form.Label>Nom du magasin</Form.Label>
-                            <Form.Control type="text" defaultValue={currentSpecies.specie} onChange={e => setCurrentSpecies({ ...currentSpecies, specie: e.target.value })} />
+                            <Form.Control type="text" defaultValue={currentSpecies.label} onChange={e => setCurrentSpecies({ ...currentSpecies, label: e.target.value })} />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Adresse</Form.Label>
-                            <Form.Control type="text" defaultValue={currentSpecies.description} onChange={e => setCurrentSpecies({ ...currentSpecies, description: e.target.value })} />
+                            <Form.Control type="text" defaultValue={currentSpecies.adresse} onChange={e => setCurrentSpecies({ ...currentSpecies, adresse: e.target.value })} />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
